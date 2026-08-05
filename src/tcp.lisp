@@ -19,16 +19,20 @@ ELEMENT-TYPE controls the stream returned by TCP-STREAM."
   (usocket:socket-connect host port :element-type element-type))
 
 (serapeum:-> tcp-listen
-  (string tcp-port &key (:backlog (integer 1 *)) (:reuse-address boolean))
+  (string tcp-port &key (:backlog (integer 1 *)) (:reuse-address boolean)
+         (:element-type t))
   t)
-(defun tcp-listen (host port &key (backlog 16) (reuse-address t))
+(defun tcp-listen (host port &key (backlog 16) (reuse-address t)
+                            (element-type '(unsigned-byte 8)))
   "Listen for TCP connections on HOST and PORT.
 
-A zero PORT requests an operating-system-selected ephemeral port."
+ELEMENT-TYPE controls streams created for accepted sockets. A zero PORT requests
+an operating-system-selected ephemeral port."
   (check-type backlog (integer 1 *))
   (usocket:socket-listen host port
                          :backlog backlog
-                         :reuse-address reuse-address))
+                         :reuse-address reuse-address
+                         :element-type element-type))
 
 (serapeum:-> tcp-accept (t &key (:element-type t)) t)
 (defun tcp-accept (listener &key (element-type '(unsigned-byte 8)))

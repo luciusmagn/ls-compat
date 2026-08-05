@@ -78,7 +78,16 @@
            (tests--check (streamp (tcp-stream client))
                           "TCP client has no stream.")
            (tests--check (streamp (tcp-stream server))
-                          "Accepted TCP connection has no stream."))
+                          "Accepted TCP connection has no stream.")
+           (let ((payload #(0 1 2 253 254 255))
+                 (received (make-array 6 :element-type '(unsigned-byte 8))))
+             (write-sequence payload (tcp-stream client))
+             (finish-output (tcp-stream client))
+             (tests--check (= (length payload)
+                              (read-sequence received (tcp-stream server)))
+                            "Accepted TCP connection did not receive every octet.")
+             (tests--check (equalp payload received)
+                            "TCP octets changed during transfer.")))
       (dolist (socket (list server client listener))
         (when socket
           (ignore-errors

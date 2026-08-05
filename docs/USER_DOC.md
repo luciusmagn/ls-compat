@@ -70,10 +70,11 @@ Load `ls-compat/tcp` for simple client and listener lifecycle operations.
 ```
 
 `tcp-connect` returns a USOCKET socket. `tcp-listen` returns a listener and
-uses a backlog of 16 and address reuse by default. `tcp-accept` returns the
-accepted socket, peer address, and peer port. `tcp-stream` returns the socket's
-bidirectional binary stream. `tcp-local-port` returns the bound local port.
-Always release sockets and listeners with `close-tcp`.
+uses a backlog of 16, address reuse, and `(unsigned-byte 8)` streams by default.
+Pass `:element-type` to request another stream element type. `tcp-accept`
+returns the accepted socket, peer address, and peer port. `tcp-stream` returns
+the socket's bidirectional stream. `tcp-local-port` returns the bound local
+port. Always release sockets and listeners with `close-tcp`.
 
 The TCP APIs deliberately expose the underlying socket object as an opaque
 value. Do not rely on its representation; pass it only to this system or close
