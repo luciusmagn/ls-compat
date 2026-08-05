@@ -2,6 +2,7 @@
   (:use #:cl)
   (:export #:utf8-string-to-octets
            #:utf8-octets-to-string
+           #:finite-float-p
            #:call-with-timeout
            #:with-timeout
            #:timeout-expired

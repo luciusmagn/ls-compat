@@ -61,6 +61,23 @@ START and END delimit the portion of OCTETS to decode."
                           :end (or end (length octets))))
 
 
+;;;; -- Floating point --
+
+(serapeum:-> finite-float-p (float) boolean)
+(defun finite-float-p (number)
+  "Return whether NUMBER is neither a NaN nor an infinity.
+
+The comparison uses the standardized finite LONG-FLOAT bounds, so it does not
+expose implementation-specific floating-point predicates. Arithmetic failures
+while inspecting a non-finite value count as false."
+  (handler-case
+      (and (= number number)
+           (<= (- most-positive-long-float) number)
+           (<= number most-positive-long-float))
+    (arithmetic-error ()
+      nil)))
+
+
 ;;;; -- Timeouts --
 
 (serapeum:-> call-with-timeout (timeout-seconds function) t)

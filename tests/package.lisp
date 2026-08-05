@@ -3,6 +3,7 @@
   (:import-from #:ls-compat
                 #:utf8-string-to-octets
                 #:utf8-octets-to-string
+                #:finite-float-p
                 #:with-timeout
                 #:timeout-expired)
   (:import-from #:ls-compat.posix

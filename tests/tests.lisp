@@ -34,6 +34,13 @@
     (tests--check (string= text (utf8-octets-to-string octets))
                   "UTF-8 decoding did not recover the original string.")))
 
+(defun tests--finite-floats ()
+  "Check that ordinary and extreme finite floats are accepted."
+  (tests--check (finite-float-p 1.0d0)
+                "An ordinary double float was not finite.")
+  (tests--check (finite-float-p (- most-positive-double-float))
+                "The largest negative double float was not finite."))
+
 (defun tests--timeout-signals-condition ()
   "Check that a deadline signals the public timeout condition."
   (handler-case
@@ -109,6 +116,7 @@
   "Run ls-compat regression tests and signal an error on any failure."
   (let ((*test-failures* nil))
     (dolist (test '(tests--utf8-round-trip
+                    tests--finite-floats
                     tests--timeout-signals-condition
                     tests--current-process-group
                     tests--exclusive-directory-and-mode

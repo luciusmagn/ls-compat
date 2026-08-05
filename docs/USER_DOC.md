@@ -18,6 +18,9 @@ Load `ls-compat` for UTF-8 conversion and deadline handling.
 and `:end` bounds. They always use UTF-8 and do not depend on the implementation
 external format.
 
+`finite-float-p` returns true only for a finite float. It rejects NaN and
+infinite values before a protocol serializes them as JSON numbers.
+
 `call-with-timeout` receives a number of seconds, or `nil`, and a nullary
 function. `with-timeout` is its body form. A completed body returns all of its
 values. A deadline signals `ls-compat:timeout-expired`; inspect its requested

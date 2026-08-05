@@ -15,6 +15,11 @@ The core system has only Babel and Serapeum dependencies. POSIX and TCP support
 are split into `ls-compat/posix` and `ls-compat/tcp` so applications do not load
 native facilities they do not use.
 
+`finite-float-p` uses Common Lisp's standardized finite `long-float` bounds and
+NaN self-inequality. Arithmetic failures while inspecting non-finite input are
+classified as non-finite instead of exposing an implementation-specific
+predicate.
+
 ## Timeout semantics
 
 `call-with-timeout` accepts an absolute duration in seconds. A `nil` duration
