@@ -44,6 +44,12 @@ not a platform-neutral file-permission model.
 `process-alive-p` treats OSICAT's `eperm` condition as evidence that the target
 PID exists. Other POSIX failures produce `nil`. This is consistent with POSIX
 `kill(pid, 0)` but cannot distinguish a reused PID from the original process.
+`process-group-alive-p` has the same semantics through `kill(-pgid, 0)`.
+
+`signal-process-group` maps `:terminate` and `:kill` to OSICAT's POSIX signal
+constants and signals the negative group identifier, thereby targeting every
+current group member. It deliberately propagates OSICAT errors rather than
+silently degrading process-tree cleanup to direct-process termination.
 
 `make-directory-exclusively` relies on the single `mkdir` system call rather
 than a check-then-create sequence. It therefore retains atomic already-exists

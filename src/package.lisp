@@ -13,6 +13,9 @@
   (:use #:cl)
   (:export #:current-process-id
            #:process-alive-p
+           #:process-group-id
+           #:process-group-alive-p
+           #:signal-process-group
            #:make-directory-exclusively
            #:file-mode))
 

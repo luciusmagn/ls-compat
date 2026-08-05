@@ -7,6 +7,8 @@
                 #:timeout-expired)
   (:import-from #:ls-compat.posix
                 #:current-process-id
+                #:process-group-id
+                #:process-group-alive-p
                 #:make-directory-exclusively
                 #:file-mode)
   (:import-from #:ls-compat.tcp

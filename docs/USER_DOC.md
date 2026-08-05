@@ -36,6 +36,9 @@ Load `ls-compat/posix` only for Unix process and permission APIs.
 
 (ls-compat.posix:current-process-id)
 (ls-compat.posix:process-alive-p process-id)
+(ls-compat.posix:process-group-id process-id)
+(ls-compat.posix:process-group-alive-p process-group-id)
+(ls-compat.posix:signal-process-group process-group-id :terminate)
 (ls-compat.posix:make-directory-exclusively #p"/tmp/example" :mode #o700)
 (setf (ls-compat.posix:file-mode #p"/tmp/example") #o700)
 ```
@@ -48,6 +51,12 @@ the mode supplied when a directory is created.
 `process-alive-p` uses `kill(pid, 0)`. It is a snapshot, not process identity:
 a PID can be reused. A process that exists but cannot be signaled due to
 permissions counts as alive.
+
+`process-group-id` returns a process's POSIX group identifier.
+`process-group-alive-p` uses `kill(-pgid, 0)` and has the same snapshot and
+permission semantics. `signal-process-group` sends `:terminate` or `:kill` to
+every member of the group. It propagates an OSICAT POSIX condition when the
+operation cannot be completed.
 
 ## TCP system
 
