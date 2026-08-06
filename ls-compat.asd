@@ -1,7 +1,7 @@
 (asdf:defsystem #:ls-compat
   :description "Focused Common Lisp portability utilities for LS projects."
   :author "Lukáš Hozda"
-  :license "MIT"
+  :license "COLL-Attribution"
   :version "0.1.0"
   :depends-on (#:babel #:serapeum)
   :serial t
