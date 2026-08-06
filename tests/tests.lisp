@@ -42,14 +42,18 @@
                 "The largest negative double float was not finite."))
 
 (defun tests--timeout-signals-condition ()
-  "Check that a deadline signals the public timeout condition."
+  "Check that a deadline expires or declares the capability unsupported."
   (handler-case
       (progn
         (with-timeout 0.01
           (sleep 1))
-        (tests--check nil "A timeout did not signal TIMEOUT-EXPIRED."))
+        (tests--check nil "A timeout did not signal a public condition."))
     (timeout-expired ()
-      t)))
+      t)
+    (unsupported-operation (condition)
+      (tests--check (eq 'ls-compat:call-with-timeout
+                        (unsupported-operation-name condition))
+                    "Unsupported timeout named the wrong operation."))))
 
 
 ;;;; -- POSIX --

@@ -11,9 +11,11 @@ its client projects. It is not a replacement for portable libraries:
 - OSICAT implements the optional POSIX system;
 - USOCKET implements the optional TCP system.
 
-The core system has only Babel and Serapeum dependencies. POSIX and TCP support
-are split into `ls-compat/posix` and `ls-compat/tcp` so applications do not load
-native facilities they do not use.
+The core system depends on Babel and, except under ECL, Serapeum for public
+function type declarations. ECL elides those declarations because the current
+Serapeum release does not compile there. POSIX and TCP support are split into
+`ls-compat/posix` and `ls-compat/tcp` so applications do not load native
+facilities they do not use.
 
 `finite-float-p` uses Common Lisp's standardized finite `long-float` bounds and
 NaN self-inequality. Arithmetic failures while inspecting non-finite input are

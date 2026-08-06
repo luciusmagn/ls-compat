@@ -11,6 +11,22 @@
   '(or null (real 0 *)))
 
 
+;;;; -- Function types --
+
+(defmacro -> (name argument-types result-type)
+  "Declare NAME's function type using the compact signature syntax used here.
+
+ECL retains the checked definitions without a declaration because its function
+type syntax cannot represent these named keyword parameters. Other
+implementations use Serapeum's portable declaration macro."
+  #+ecl
+  (declare (ignore name argument-types result-type))
+  #+ecl
+  nil
+  #-ecl
+  `(serapeum:-> ,name ,argument-types ,result-type))
+
+
 ;;;; -- Conditions --
 
 (define-condition timeout-expired (error)
@@ -36,7 +52,7 @@
 
 ;;;; -- UTF-8 --
 
-(serapeum:-> utf8-string-to-octets
+(-> utf8-string-to-octets
   (string &key (:start (or null (integer 0 *))) (:end (or null (integer 0 *))))
   octet-vector)
 (defun utf8-string-to-octets (string &key start end)
@@ -48,7 +64,7 @@ START and END delimit the portion of STRING to encode."
                           :start (or start 0)
                           :end (or end (length string))))
 
-(serapeum:-> utf8-octets-to-string
+(-> utf8-octets-to-string
   (octet-vector &key (:start (or null (integer 0 *))) (:end (or null (integer 0 *))))
   string)
 (defun utf8-octets-to-string (octets &key start end)
@@ -63,7 +79,7 @@ START and END delimit the portion of OCTETS to decode."
 
 ;;;; -- Floating point --
 
-(serapeum:-> finite-float-p (float) boolean)
+(-> finite-float-p (float) boolean)
 (defun finite-float-p (number)
   "Return whether NUMBER is neither a NaN nor an infinity.
 
@@ -80,7 +96,7 @@ while inspecting a non-finite value count as false."
 
 ;;;; -- Timeouts --
 
-(serapeum:-> call-with-timeout (timeout-seconds function) t)
+(-> call-with-timeout (timeout-seconds function) t)
 (defun call-with-timeout (seconds thunk)
   "Call THUNK with a deadline of SECONDS.
 

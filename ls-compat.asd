@@ -3,7 +3,8 @@
   :author "Lukáš Hozda"
   :license "COLL-Attribution"
   :version "0.1.0"
-  :depends-on (#:babel #:serapeum)
+  :depends-on (#:babel
+               #-ecl #:serapeum)
   :serial t
   :components ((:file "src/package")
                (:file "src/core"))

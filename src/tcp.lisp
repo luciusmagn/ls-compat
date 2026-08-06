@@ -9,7 +9,7 @@
 
 ;;;; -- TCP lifecycle --
 
-(serapeum:-> tcp-connect
+(ls-compat::-> tcp-connect
   (string tcp-port &key (:element-type t))
   t)
 (defun tcp-connect (host port &key (element-type '(unsigned-byte 8)))
@@ -18,7 +18,7 @@
 ELEMENT-TYPE controls the stream returned by TCP-STREAM."
   (usocket:socket-connect host port :element-type element-type))
 
-(serapeum:-> tcp-listen
+(ls-compat::-> tcp-listen
   (string tcp-port &key (:backlog (integer 1 *)) (:reuse-address boolean)
          (:element-type t))
   t)
@@ -34,22 +34,22 @@ an operating-system-selected ephemeral port."
                          :reuse-address reuse-address
                          :element-type element-type))
 
-(serapeum:-> tcp-accept (t &key (:element-type t)) t)
+(ls-compat::-> tcp-accept (t &key (:element-type t)) t)
 (defun tcp-accept (listener &key (element-type '(unsigned-byte 8)))
   "Accept one connection from LISTENER."
   (usocket:socket-accept listener :element-type element-type))
 
-(serapeum:-> tcp-stream (t) stream)
+(ls-compat::-> tcp-stream (t) stream)
 (defun tcp-stream (socket)
   "Return SOCKET's stream."
   (usocket:socket-stream socket))
 
-(serapeum:-> tcp-local-port (t) tcp-port)
+(ls-compat::-> tcp-local-port (t) tcp-port)
 (defun tcp-local-port (socket)
   "Return SOCKET's locally bound TCP port."
   (nth-value 1 (usocket:get-local-name socket)))
 
-(serapeum:-> close-tcp (t) null)
+(ls-compat::-> close-tcp (t) null)
 (defun close-tcp (socket)
   "Close SOCKET and return NIL."
   (usocket:socket-close socket)

@@ -9,7 +9,7 @@
 
 ;;;; -- Pathnames --
 
-(serapeum:-> posix--native-namestring (pathname-designator) string)
+(ls-compat::-> posix--native-namestring (pathname-designator) string)
 (defun posix--native-namestring (pathname)
   "Return PATHNAME as a native namestring for OSICAT."
   (uiop:native-namestring (pathname pathname)))
@@ -17,7 +17,7 @@
 
 ;;;; -- Processes --
 
-(serapeum:-> current-process-id () (integer 1 *))
+(ls-compat::-> current-process-id () (integer 1 *))
 (defun current-process-id ()
   "Return the current process ID."
   (osicat-posix:getpid))
@@ -33,7 +33,7 @@
     (osicat-posix:posix-error ()
       nil)))
 
-(serapeum:-> process-alive-p ((integer 1 *)) boolean)
+(ls-compat::-> process-alive-p ((integer 1 *)) boolean)
 (defun process-alive-p (process-id)
   "Return whether PROCESS-ID currently exists or cannot be signaled.
 
@@ -42,12 +42,12 @@ process appears to exist but cannot be signaled by the current user. PID reuse
 means the predicate cannot prove process identity."
   (posix--process-target-alive-p process-id))
 
-(serapeum:-> process-group-id ((integer 1 *)) (integer 1 *))
+(ls-compat::-> process-group-id ((integer 1 *)) (integer 1 *))
 (defun process-group-id (process-id)
   "Return the POSIX process group identifier of PROCESS-ID."
   (osicat-posix:getpgid process-id))
 
-(serapeum:-> process-group-alive-p ((integer 1 *)) boolean)
+(ls-compat::-> process-group-alive-p ((integer 1 *)) boolean)
 (defun process-group-alive-p (process-group-id)
   "Return whether PROCESS-GROUP-ID currently has members.
 
@@ -55,7 +55,7 @@ This is a POSIX kill-with-signal-zero snapshot. An EPERM response means that a
 process group appears to exist but cannot be signaled by the current user."
   (posix--process-target-alive-p (- process-group-id)))
 
-(serapeum:-> signal-process-group
+(ls-compat::-> signal-process-group
   ((integer 1 *) (member :terminate :kill))
   (integer 1 *))
 (defun signal-process-group (process-group-id signal)
@@ -73,7 +73,7 @@ group, propagate as OSICAT conditions."
 
 ;;;; -- Filesystem modes --
 
-(serapeum:-> make-directory-exclusively
+(ls-compat::-> make-directory-exclusively
   (pathname-designator &key (:mode (integer 0 #o777)))
   pathname)
 (defun make-directory-exclusively (pathname &key (mode #o700))
@@ -85,13 +85,13 @@ fails. The operating system umask can further restrict MODE."
   (osicat-posix:mkdir (posix--native-namestring pathname) mode)
   (pathname pathname))
 
-(serapeum:-> file-mode (pathname-designator) (integer 0 *))
+(ls-compat::-> file-mode (pathname-designator) (integer 0 *))
 (defun file-mode (pathname)
   "Return PATHNAME's raw POSIX mode bits."
   (osicat-posix:stat-mode
    (osicat-posix:stat (posix--native-namestring pathname))))
 
-(serapeum:-> (setf file-mode) ((integer 0 #o777) pathname-designator) (integer 0 #o777))
+(ls-compat::-> (setf file-mode) ((integer 0 #o777) pathname-designator) (integer 0 #o777))
 (defun (setf file-mode) (mode pathname)
   "Set PATHNAME's permission MODE and return MODE."
   (check-type mode (integer 0 #o777))

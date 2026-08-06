@@ -17,8 +17,8 @@ wrapper around all of UIOP, Bordeaux Threads, OSICAT, or USOCKET.
 - Use one public package per ASDF system, documented in `src/package.lisp`.
 - Use `+constants+`, `*specials*`, kebab-case public names, and `--` private
   names.
-- Give public definitions docstrings and declare their types with Serapeum
-  `->`.
+- Give public definitions docstrings and declare their types with the local
+  `->` macro.
 - Define typed conditions with useful reports for recoverable portability
   failures.
 - Keep two blank lines between major sections, one between definitions, and

@@ -5,7 +5,9 @@
                 #:utf8-octets-to-string
                 #:finite-float-p
                 #:with-timeout
-                #:timeout-expired)
+                #:timeout-expired
+                #:unsupported-operation
+                #:unsupported-operation-name)
   (:import-from #:ls-compat.posix
                 #:current-process-id
                 #:process-group-id
