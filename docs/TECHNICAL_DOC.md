@@ -8,12 +8,13 @@ its client projects. It is not a replacement for portable libraries:
 - projects use UIOP directly for paths, processes, and environment variables;
 - projects use Bordeaux Threads directly for threads and synchronization;
 - Babel supplies UTF-8 codecs;
-- OSICAT implements the optional POSIX system;
+- SBCL's bundled SB-POSIX interface implements the optional POSIX system;
 - USOCKET implements the optional TCP system.
 
 The core system depends on Babel and, except under ECL, Serapeum for public
 function type declarations. ECL elides those declarations because the current
-Serapeum release does not compile there. POSIX and TCP support are split into
+Serapeum release does not compile there. POSIX support is currently SBCL-only.
+POSIX and TCP support are split into
 `ls-compat/posix` and `ls-compat/tcp` so applications do not load native
 facilities they do not use.
 
@@ -45,17 +46,17 @@ backend.
 ## POSIX semantics
 
 The POSIX system normalizes path designators through `uiop:native-namestring`
-before passing them to OSICAT. It intentionally exposes raw permission bits,
+before passing them to SB-POSIX. It intentionally exposes raw permission bits,
 not a platform-neutral file-permission model.
 
-`process-alive-p` treats OSICAT's `eperm` condition as evidence that the target
+`process-alive-p` treats an SB-POSIX `EPERM` result as evidence that the target
 PID exists. Other POSIX failures produce `nil`. This is consistent with POSIX
 `kill(pid, 0)` but cannot distinguish a reused PID from the original process.
 `process-group-alive-p` has the same semantics through `kill(-pgid, 0)`.
 
-`signal-process-group` maps `:terminate` and `:kill` to OSICAT's POSIX signal
+`signal-process-group` maps `:terminate` and `:kill` to SB-POSIX signal
 constants and signals the negative group identifier, thereby targeting every
-current group member. It deliberately propagates OSICAT errors rather than
+current group member. It deliberately propagates SB-POSIX errors rather than
 silently degrading process-tree cleanup to direct-process termination.
 
 `make-directory-exclusively` relies on the single `mkdir` system call rather
@@ -78,9 +79,10 @@ and mode operations, and a loopback TCP connection. The test system is run on:
 | Implementation | Core | POSIX | TCP | Timeout |
 | --- | --- | --- | --- | --- |
 | SBCL | supported | supported on Unix | supported | supported |
-| CCL | supported | supported on Unix | supported | supported |
-| ECL | loadable | dependency/platform dependent | dependency/platform dependent | signals `unsupported-operation` |
+| CCL | supported | signals `unsupported-operation` | supported | supported |
+| ECL | loadable | signals `unsupported-operation` | dependency/platform dependent | signals `unsupported-operation` |
 
-An implementation may load a system only where its dependencies support it.
+The POSIX system loads on other implementations so calls can signal the explicit
+`unsupported-operation` boundary.
 The matrix is a statement of tested library behavior, not a claim that every
 client application is portable.

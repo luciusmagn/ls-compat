@@ -46,8 +46,9 @@ Load `ls-compat/posix` only for Unix process and permission APIs.
 (setf (ls-compat.posix:file-mode #p"/tmp/example") #o700)
 ```
 
-`make-directory-exclusively` is atomic. It signals the underlying OSICAT POSIX
-condition if the directory already exists or cannot be created. `file-mode`
+`make-directory-exclusively` is atomic. On SBCL it signals the underlying
+SB-POSIX condition if the directory already exists or cannot be created.
+`file-mode`
 reads and writes raw POSIX mode bits. The operating-system umask may restrict
 the mode supplied when a directory is created.
 
@@ -58,8 +59,12 @@ permissions counts as alive.
 `process-group-id` returns a process's POSIX group identifier.
 `process-group-alive-p` uses `kill(-pgid, 0)` and has the same snapshot and
 permission semantics. `signal-process-group` sends `:terminate` or `:kill` to
-every member of the group. It propagates an OSICAT POSIX condition when the
+every member of the group. On SBCL it propagates an SB-POSIX condition when the
 operation cannot be completed.
+
+The POSIX backend currently supports SBCL on Unix. On other implementations,
+these operations signal `ls-compat:unsupported-operation`. The core `ls-compat`
+system remains loadable on ECL.
 
 ## TCP system
 

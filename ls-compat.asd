@@ -11,8 +11,8 @@
   :in-order-to ((asdf:test-op (asdf:test-op #:ls-compat/tests))))
 
 (asdf:defsystem #:ls-compat/posix
-  :description "Unix-specific ls-compat operations backed by OSICAT."
-  :depends-on (#:ls-compat #:osicat)
+  :description "Unix-specific ls-compat operations backed by SB-POSIX on SBCL."
+  :depends-on (#:ls-compat #+sbcl #:sb-posix)
   :serial t
   :components ((:file "src/posix")))
 

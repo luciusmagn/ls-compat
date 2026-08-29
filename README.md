@@ -33,8 +33,10 @@ implementation without a safe implementation hook, attempting a timeout
 signals `ls-compat:unsupported-operation` rather than silently ignoring the
 deadline.
 
-The POSIX and TCP systems are intended for Unix-like systems. They use OSICAT
-and USOCKET respectively.
+The POSIX and TCP systems are intended for Unix-like systems. The POSIX
+system uses SBCL's bundled SB-POSIX interface and signals
+`ls-compat:unsupported-operation` on other implementations. The TCP system
+uses USOCKET.
 
 See `docs/USER_DOC.md` for the API and `docs/TECHNICAL_DOC.md` for semantics
 and implementation constraints.

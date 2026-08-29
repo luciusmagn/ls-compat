@@ -3,7 +3,7 @@
 ## Scope
 
 `ls-compat` is a deliberately small portability facade. Do not turn it into a
-wrapper around all of UIOP, Bordeaux Threads, OSICAT, or USOCKET.
+wrapper around all of UIOP, Bordeaux Threads, or USOCKET.
 
 - Keep UIOP and Bordeaux Threads as direct project dependencies.
 - Add a facade only when it removes an implementation-specific API from a

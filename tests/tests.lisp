@@ -58,10 +58,25 @@
 
 ;;;; -- POSIX --
 
+(defun tests--posix-supported-p ()
+  "Return whether this implementation provides the POSIX backend."
+  (handler-case
+      (progn
+        (current-process-id)
+        t)
+    (unsupported-operation (condition)
+      (tests--check
+       (eq 'ls-compat.posix:current-process-id
+           (unsupported-operation-name condition))
+       "Unsupported POSIX backend named the wrong operation.")
+      nil)))
+
 (defun tests--current-process-group ()
   "Check current process group lookup and liveness."
   (let* ((process-id (current-process-id))
          (process-group-id (process-group-id process-id)))
+    (tests--check (process-alive-p process-id)
+                  "Current process is not alive.")
     (tests--check (plusp process-group-id)
                   "Current process group identifier is not positive.")
     (tests--check (process-group-alive-p process-group-id)
@@ -121,11 +136,13 @@
   (let ((*test-failures* nil))
     (dolist (test '(tests--utf8-round-trip
                     tests--finite-floats
-                    tests--timeout-signals-condition
-                    tests--current-process-group
-                    tests--exclusive-directory-and-mode
-                    tests--tcp-lifecycle))
+                    tests--timeout-signals-condition))
       (funcall test))
+    (when (tests--posix-supported-p)
+      (dolist (test '(tests--current-process-group
+                      tests--exclusive-directory-and-mode))
+        (funcall test)))
+    (tests--tcp-lifecycle)
     (when *test-failures*
       (error "ls-compat test failures:~%~{~A~%~}"
              (nreverse *test-failures*)))

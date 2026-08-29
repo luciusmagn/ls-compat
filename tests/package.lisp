@@ -10,6 +10,7 @@
                 #:unsupported-operation-name)
   (:import-from #:ls-compat.posix
                 #:current-process-id
+                #:process-alive-p
                 #:process-group-id
                 #:process-group-alive-p
                 #:make-directory-exclusively
