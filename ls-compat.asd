@@ -11,10 +11,11 @@
   :in-order-to ((asdf:test-op (asdf:test-op #:ls-compat/tests))))
 
 (asdf:defsystem #:ls-compat/posix
-  :description "Unix-specific ls-compat operations backed by SB-POSIX on SBCL."
+  :description "Process and file operations backed by SB-POSIX, with a Win32 backend."
   :depends-on (#:ls-compat #+sbcl #:sb-posix)
   :serial t
-  :components ((:file "src/posix")))
+  :components ((:file "src/win32" :if-feature (:and :sbcl :win32))
+               (:file "src/posix")))
 
 (asdf:defsystem #:ls-compat/tcp
   :description "TCP lifecycle operations backed by USOCKET."
